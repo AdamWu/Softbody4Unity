@@ -166,10 +166,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47b67ace1fb6f449a96d66fe2c27a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numIterations: 100
+  numIterations: 10
   massCount: 11
   massSize: 0.02
-  ks: 10000
+  ks: 500
   kd: 0.8
 --- !u!33 &500480071
 MeshFilter:
