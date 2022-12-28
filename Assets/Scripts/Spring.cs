@@ -12,8 +12,8 @@ class Spring
         this.kd = kd;
     }
 
-    private Mass massA;
-    private Mass massB;
+    public Mass massA;
+    public Mass massB;
 
     private float restLen = 0f;
 
