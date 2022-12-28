@@ -30,13 +30,8 @@ public class Softbody : MonoBehaviour
             {
                 for (int k = 0; k < massCount; k++)
                 {
-                    GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    go.name = string.Format("{0}-{1}-{2}", i, j, k);
-                    Destroy(go.GetComponent<Collider>());
-                    go.transform.SetParent(transform);
-                    go.transform.localScale = Vector3.one * massSize;
-                    go.transform.localPosition = new Vector3(i, k, j) * 0.1f;
-                    Mass mass = go.AddComponent<Mass>();
+                    Vector3 position = transform.position + new Vector3(i, k, j) * 0.1f;
+                    Mass mass = new Mass(position);
                     lstMass.Add(mass);
                 }
             }
@@ -47,7 +42,7 @@ public class Softbody : MonoBehaviour
             for (int j = i+1; j < lstMass.Count; j++)
             {
                 Mass massB = lstMass[j];
-                float len = (massA.transform.position - massB.transform.position).magnitude;
+                float len = (massA.position - massB.position).magnitude;
                 if (len < linkRadius)
                 {
                     Spring spring = new Spring(massA, massB, len, ks);
@@ -86,10 +81,18 @@ public class Softbody : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.white;
+        for (int i = 0; i < lstMass.Count; i++)
+        {
+            Mass mass = lstMass[i];
+            Gizmos.DrawSphere(mass.position, 0.05f);
+        }
+
+        Gizmos.color = Color.red;
         for (int i = 0; i < lstSpring.Count; i++)
         {
             Spring spring = lstSpring[i];
-            Debug.DrawLine(spring.massA.transform.position, spring.massB.transform.position, Color.red);
+            Gizmos.DrawLine(spring.massA.position, spring.massB.position);
         }
     }
 }

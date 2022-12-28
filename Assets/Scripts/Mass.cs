@@ -1,22 +1,24 @@
 using UnityEngine;
 
 
-class Mass : MonoBehaviour
+class Mass
 {
+    public Mass(Vector3 position, float mass = 0.1f)
+    {
+        this.position = position;
+        this.mass = mass;
+        F = V = Vector3.zero;
+    }
+
     public float mass = 0.1f;
 
     public Vector3 F;
     public Vector3 A;
     public Vector3 V;
-    public Vector3 P;
+
+    public Vector3 position;
 
     public bool isStatic = false;
-
-    private void Start()
-    {
-        F = V = Vector3.zero;
-        P = transform.position;
-    }
 
     public void Simulate(float dt)
     {
@@ -33,14 +35,13 @@ class Mass : MonoBehaviour
         V += A * dt;
 
         RaycastHit hitInfo;
-        if (Physics.SphereCast(transform.position, 0.005f, V.normalized, out hitInfo, dt * V.magnitude * 1.5f))
+        if (Physics.SphereCast(position, 0.005f, V.normalized, out hitInfo, dt * V.magnitude * 1.5f))
         {
             V = Vector3.Reflect(V.normalized, hitInfo.normal) * V.magnitude * 0.5f * Mathf.Clamp01(hitInfo.distance * 300);
             //if (V.magnitude < 0.01) V = Vector3.zero;
         }
 
-        P += V * dt;
-        transform.position = P;
+        position += V * dt;
 
         // clear force
         F = Vector3.zero;

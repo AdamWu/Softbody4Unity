@@ -22,7 +22,7 @@ class Spring
 
     public void Simulate(float dt)
     {
-        Vector3 delta = massB.transform.position - massA.transform.position;
+        Vector3 delta = massB.position - massA.position;
         Vector3 force = ks * delta.normalized * (delta.magnitude - restLen);
 
         // spring resistance

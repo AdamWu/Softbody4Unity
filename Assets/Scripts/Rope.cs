@@ -11,18 +11,13 @@ public class Rope : MonoBehaviour
     {
         for (int i = 0; i < 10; i ++)
         {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            go.name = i.ToString();
-            Destroy(go.GetComponent<Collider>());
-            go.transform.SetParent(transform);
-            go.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            go.transform.localPosition = new Vector3(i * 0.15f, 0, 0);
-            Mass mass = go.AddComponent<Mass>();
+            Vector3 position = transform.position + new Vector3(i, 0, 0) * 0.15f;
+            Mass mass = new Mass(position);
             lstMass.Add(mass);
         }
         for (int i = 0; i < lstMass.Count -1; i ++)
         {
-            float len = (lstMass[i].transform.position - lstMass[i + 1].transform.position).magnitude;
+            float len = (lstMass[i].position - lstMass[i + 1].position).magnitude;
             Spring spring = new Spring(lstMass[i], lstMass[i + 1], len);
             lstSpring.Add(spring);
         }
@@ -40,6 +35,23 @@ public class Rope : MonoBehaviour
         for (int i = 0; i < lstMass.Count; i++)
         {
             lstMass[i].Simulate(dt);
+        }
+    }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        for (int i = 0; i < lstMass.Count; i++)
+        {
+            Mass mass = lstMass[i];
+            Gizmos.DrawSphere(mass.position, 0.05f);
+        }
+
+        Gizmos.color = Color.red;
+        for (int i = 0; i < lstSpring.Count; i++)
+        {
+            Spring spring = lstSpring[i];
+            Gizmos.DrawLine(spring.massA.position, spring.massB.position);
         }
     }
 }
